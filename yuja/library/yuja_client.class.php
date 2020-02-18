@@ -1,0 +1,213 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Yuja Local Plugin
+ * @package    local_yuja
+ * @subpackage yuja
+ * @copyright  2016 YuJa
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+defined('MOODLE_INTERNAL') || die('Must access from moodle');
+
+global $CFG;
+require_once($CFG->dirroot. '/mod/lti/locallib.php');
+
+require_once('yuja_config.class.php');
+
+/**
+ * The YuJa Moodle Client
+ * 
+ * Encapsulates extracting LTI information and creating signed urls to access YuJa resources
+ */
+class yuja_client
+{
+    /** @var yuja_config Yuja Moodle config values */
+    private $_config;
+
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        $this->_config = new yuja_config();
+    }
+
+    /**
+     * Get the base lti request params
+     * @param object $course the course
+     * @param guid $requestid a unique ID for the request for which the paramters are generated
+     * @return array
+     */
+    public function get_lti_params($course, $requestid) {
+        global $USER, $CFG;
+
+        $instance = new stdClass();
+        $instance->id = $requestid;
+
+        // This building of organizationid is based on the lti_view function in /mod/lit/locallib.php.
+        $orgid = parse_url($CFG->wwwroot)['host'];
+        $basicparams = lti_build_standard_request($instance, $orgid, false);
+
+        $usergiven = (isset($USER->firstname)) ? $USER->firstname : '';
+        $userfamily = (isset($USER->lastname)) ? $USER->lastname : '';
+        $userfull = trim($usergiven . ' ' . $userfamily);
+        $useremail = (isset($USER->email)) ? $USER->email : '';
+        $useridnumber = (isset($USER->idnumber)) ? $USER->idnumber : '';
+        $userusername = (isset($USER->username)) ? $USER->username : '';
+
+        if ($CFG->version <= '2014111000') {
+            $roles = lti_get_ims_role($USER, 0, $course->id);
+        } else {
+            // Moodle 2.8 (2014111000) adds support for specifying whether this is an LTI 2.0 launch.
+            $roles = lti_get_ims_role($USER, 0, $course->id, false);
+        }
+        $customparams = array(
+            'context_id' => $course->id,
+            'context_label' => $course->shortname,
+            'context_title' => $course->fullname,
+            'ext_lms' => 'moodle-2',
+            'lis_person_sourcedid' => $useridnumber,
+            'custom_lis_person_sourcedid' => $userusername,
+            'lis_person_name_family' => $userfamily,
+            'lis_person_name_full' => $userfull,
+            'lis_person_name_given' => $usergiven,
+            'lis_person_contact_email_primary' => $useremail,
+            'lti_message_type' => 'basic-lti-launch-request',
+            'lti_version' => 'LTI-1p0',
+            'roles' => $roles,
+            'tool_consumer_info_product_family_code' => 'moodle',
+            'tool_consumer_info_version' => (string)$CFG->version,
+            'user_id' => $USER->id,
+            'custom_context_id' => $course->idnumber,
+            'custom_plugin_info' => $this->_config->get_plugin_info(),
+        );
+
+        $params = array_merge($basicparams, $customparams);
+
+        return $params;
+    }
+
+    /**
+     * Urlencode the query params values
+     * @param string $params
+     * @return array
+     */
+    public function get_query($params) {
+        $encodedparams = '';
+        foreach ($params as $k => $v) {
+            $encodedparams .= "$k=" . urlencode($v) . "&";
+        }
+        return substr($encodedparams, 0, -1);
+    }
+
+    /**
+     * Get the signed lti parameters using OAuth
+     * @param string $endpoint
+     * @param string $method
+     * @param int $courseid
+     * @param array $params
+     * @return array
+     */
+    public function get_signed_lti_params($endpoint, $method='GET', $courseid=null, $params=array()) {
+
+        global $DB;
+
+        if (!$this->_config->has_lti_config()) {
+            throw new Exception(get_string('no_lti_config', LOCAL_YUJA_PLUGIN_NAME));
+        } else if (empty($courseid)) {
+            throw new Exception(get_string('no_course_id', LOCAL_YUJA_PLUGIN_NAME));
+        }
+
+        $course = $DB->get_record('course', array('id' => (int)$courseid), '*', MUST_EXIST);
+        $key = $this->_config->get_consumer_key();
+        $secret = $this->_config->get_shared_secret();
+        $queryparams = $this->get_lti_params($course, 'yuja-media-chooser');
+
+        return lti_sign_parameters(array_replace($queryparams, $params), $endpoint, $method, $key, $secret);
+    }
+
+    /**
+     * Sign and return a url for the yuja videos request
+     * @param string|int $courseid
+     * @return string
+     */
+    public function get_signed_videos_url($courseid) {
+        $url = $this->get_yuja_videos_url();
+        return $url . '?' . $this->get_query(
+            $this->get_signed_lti_params(
+                $url, 'GET', $courseid, array('ext_content_return_types' => 'lti_api;moodle-media-chooser'))
+        );
+    }
+
+    /**
+     * Sign and return a url for the yuja javascript
+     * @param string|int $courseid
+     * @return string
+     */
+    public function get_signed_js_url($courseid) {
+        $url = $this->get_yuja_videos_url();
+        return $url . '?' . $this->get_query(
+            $this->get_signed_lti_params(
+                $url, 'GET', $courseid, array('ext_content_return_types' => 'lti_api;moodle-media-chooser-js'))
+        );
+    }
+
+    /**
+     * Get the custom atto/tinymce params
+     * @return array
+     */
+    public function get_texteditor_params() {
+        global $COURSE;
+
+        $params = array();
+
+        if ($this->has_lti_config() && isset($COURSE->id)) {
+            try {
+                $params['yujaVideosUrl'] = $this->get_signed_videos_url($COURSE->id);
+                $params['yujaJsUrl'] = $this->get_signed_js_url($COURSE->id);
+            } catch (Exception $e) {
+                $param['yujaError'] = $e->getMessage();
+            }
+        }
+
+        return $params;
+    }
+
+    /**
+     * Get the moodle webroot
+     * @return string
+     */
+    public function get_webroot() {
+        return $this->_config->get_webroot();
+    }
+
+    /**
+     * Get the url for the yuja videos request
+     * @return string
+     */
+    private function get_yuja_videos_url() {
+        return $this->_config->get_access_url();
+    }
+
+    /**
+     * Whether the config is setup for lti
+     * @return boolean
+     */
+    public function has_lti_config() {
+        return $this->_config->has_lti_config();
+    }
+}
