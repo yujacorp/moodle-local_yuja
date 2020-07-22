@@ -23,21 +23,21 @@
  */
 
 // Plugin settings.
-$string['pluginname'] = 'YuJa Package Config';
+$string['pluginname'] = 'YuJa package config';
 
 $string['setting_heading_desc'] = 'These settings customize the method in which your Moodle instance connects to your YuJa site.<br/><br/>Please see the following [support articles](http://support.yuja.com/) for complete information on this plugin.<br/><br/> It also may be necessary to purge your Moodle caches after changing these settings.<br/><br/>';
 
-$string['setting_access_url_label'] = 'Your YuJa Access URL:';
+$string['setting_access_url_label'] = 'Your YuJa access URL:';
 $string['setting_access_url_desc'] = '**Note:** This setting is your YuJa access URL provided by your YuJa Solutions Engineer.<br/><br/>';
 
-$string['setting_consumer_key_label'] = 'Your YuJa Consumer Key';
+$string['setting_consumer_key_label'] = 'Your YuJa consumer key';
 $string['setting_consumer_key_desc'] = '**Note:** This is your unique YuJa LTI consumer key provided by your YuJa Solutions Engineer.';
 
-$string['setting_shared_secret_label'] = 'Your YuJa Shared Secret';
+$string['setting_shared_secret_label'] = 'Your YuJa shared secret';
 $string['setting_shared_secret_desc'] = '**Note:** This is your unique YuJa LTI shared secret provided by your YuJa Solutions Engineer.';
 
 $string['no_course_id'] = 'Expected a valid course id';
-$string['no_lti_config'] = 'Expected some LTI configuration settings. Please update your YuJa Package';
+$string['no_lti_config'] = 'Expected some LTI configuration settings. Please update your YuJa package';
 
 
 // Privacy API fields
