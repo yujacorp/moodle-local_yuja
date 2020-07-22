@@ -27,8 +27,6 @@ defined('MOODLE_INTERNAL') || die('Must access from moodle');
 global $CFG;
 require_once($CFG->dirroot. '/mod/lti/locallib.php');
 
-require_once('yuja_config.class.php');
-
 /**
  * The YuJa Moodle Client
  * 
@@ -36,16 +34,6 @@ require_once('yuja_config.class.php');
  */
 class yuja_client
 {
-    /** @var yuja_config Yuja Moodle config values */
-    private $_config;
-
-    /**
-     * Constructor
-     */
-    public function __construct() {
-        $this->_config = new yuja_config();
-    }
-
     /**
      * Get the base lti request params
      * @param object $course the course
@@ -64,7 +52,8 @@ class yuja_client
 
         $usergiven = (isset($USER->firstname)) ? $USER->firstname : '';
         $userfamily = (isset($USER->lastname)) ? $USER->lastname : '';
-        $userfull = trim($usergiven . ' ' . $userfamily);
+        //$userfull = trim($usergiven . ' ' . $userfamily);
+        $userfull = (isset($USER->fullname)) ? $USER->fullname : '';
         $useremail = (isset($USER->email)) ? $USER->email : '';
         $useridnumber = (isset($USER->idnumber)) ? $USER->idnumber : '';
         $userusername = (isset($USER->username)) ? $USER->username : '';
@@ -93,7 +82,7 @@ class yuja_client
             'tool_consumer_info_version' => (string)$CFG->version,
             'user_id' => $USER->id,
             'custom_context_id' => $course->idnumber,
-            'custom_plugin_info' => $this->_config->get_plugin_info(),
+            'custom_plugin_info' => $this->get_plugin_info(),
         );
 
         $params = array_merge($basicparams, $customparams);
@@ -126,15 +115,15 @@ class yuja_client
 
         global $DB;
 
-        if (!$this->_config->has_lti_config()) {
-            throw new Exception(get_string('no_lti_config', LOCAL_YUJA_PLUGIN_NAME));
+        if (!$this->has_lti_config()) {
+            throw new Exception(get_string('no_lti_config', 'local_yuja'));
         } else if (empty($courseid)) {
-            throw new Exception(get_string('no_course_id', LOCAL_YUJA_PLUGIN_NAME));
+            throw new Exception(get_string('no_course_id', 'local_yuja'));
         }
 
         $course = $DB->get_record('course', array('id' => (int)$courseid), '*', MUST_EXIST);
-        $key = $this->_config->get_consumer_key();
-        $secret = $this->_config->get_shared_secret();
+        $key = get_config('local_yuja', 'consumer_key');
+        $secret = get_config('local_yuja', 'shared_secret');
         $queryparams = $this->get_lti_params($course, 'yuja-media-chooser');
 
         return lti_sign_parameters(array_replace($queryparams, $params), $endpoint, $method, $key, $secret);
@@ -192,7 +181,7 @@ class yuja_client
      * @return string
      */
     public function get_webroot() {
-        return $this->_config->get_webroot();
+        return rtrim($CFG->wwwroot, '/');
     }
 
     /**
@@ -200,7 +189,7 @@ class yuja_client
      * @return string
      */
     private function get_yuja_videos_url() {
-        return $this->_config->get_access_url();
+        return get_config('local_yuja', 'access_url');
     }
 
     /**
@@ -208,6 +197,16 @@ class yuja_client
      * @return boolean
      */
     public function has_lti_config() {
-        return $this->_config->has_lti_config();
+        return (!empty(get_config('local_yuja', 'access_url')) &&
+        !empty(get_config('local_yuja', 'consumer_key')) &&
+        !empty(get_config('local_yuja', 'shared_secret')));
+    }
+
+    /**
+     * Get the yuja local plugin info
+     * @return string
+     */
+    public function get_plugin_info() {
+        return 'yuja-moodle-' . get_config('local_yuja', 'version');
     }
 }

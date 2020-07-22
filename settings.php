@@ -29,49 +29,49 @@ require_once($CFG->dirroot. '/local/yuja/lib.php');
 
 if ($hassiteconfig) {
     $settings = new admin_settingpage(
-            LOCAL_YUJA_PLUGIN_NAME,
-            get_string('pluginname', LOCAL_YUJA_PLUGIN_NAME)
+            'local_yuja',
+            get_string('pluginname', 'local_yuja')
         );
 
     // Heading.
     $setting = new admin_setting_heading(
-            LOCAL_YUJA_PLUGIN_NAME . '/heading',
+            'local_yuja' . '/heading',
             '',
-            get_string('setting_heading_desc', LOCAL_YUJA_PLUGIN_NAME)
+            get_string('setting_heading_desc', 'local_yuja')
         );
-    $setting->plugin = LOCAL_YUJA_PLUGIN_NAME;
+    $setting->plugin = 'local_yuja';
     $settings->add($setting);
 
     // Access url.
     $setting = new admin_setting_configtext(
-            LOCAL_YUJA_PLUGIN_NAME . '/access_url',
-            get_string('setting_access_url_label', LOCAL_YUJA_PLUGIN_NAME),
-            get_string('setting_access_url_desc', LOCAL_YUJA_PLUGIN_NAME),
+            'local_yuja' . '/access_url',
+            get_string('setting_access_url_label', 'local_yuja'),
+            get_string('setting_access_url_desc', 'local_yuja'),
             '',
             PARAM_TEXT
         );
-    $setting->plugin = LOCAL_YUJA_PLUGIN_NAME;
+    $setting->plugin = 'local_yuja';
     $settings->add($setting);
 
     // Consumer_key.
     $setting = new admin_setting_configtext(
-            LOCAL_YUJA_PLUGIN_NAME . '/consumer_key',
-            get_string('setting_consumer_key_label', LOCAL_YUJA_PLUGIN_NAME),
-            get_string('setting_consumer_key_desc', LOCAL_YUJA_PLUGIN_NAME),
+            'local_yuja' . '/consumer_key',
+            get_string('setting_consumer_key_label', 'local_yuja'),
+            get_string('setting_consumer_key_desc', 'local_yuja'),
             '',
             PARAM_TEXT
         );
-    $setting->plugin = LOCAL_YUJA_PLUGIN_NAME;
+    $setting->plugin = 'local_yuja';
     $settings->add($setting);
 
     // Shared_secret.
     $setting = new admin_setting_configtext(
-            LOCAL_YUJA_PLUGIN_NAME . '/shared_secret',
-            get_string('setting_shared_secret_label', LOCAL_YUJA_PLUGIN_NAME),
-            get_string('setting_shared_secret_desc', LOCAL_YUJA_PLUGIN_NAME),
+            'local_yuja' . '/shared_secret',
+            get_string('setting_shared_secret_label', 'local_yuja'),
+            get_string('setting_shared_secret_desc', 'local_yuja'),
             '', PARAM_TEXT
         );
-    $setting->plugin = LOCAL_YUJA_PLUGIN_NAME;
+    $setting->plugin = 'local_yuja';
     $settings->add($setting);
 
     $ADMIN->add('localplugins', $settings);

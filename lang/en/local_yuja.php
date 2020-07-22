@@ -23,18 +23,35 @@
  */
 
 // Plugin settings.
-$string['pluginname'] = 'YuJa Package Config';
+$string['pluginname'] = 'YuJa package config';
 
 $string['setting_heading_desc'] = 'These settings customize the method in which your Moodle instance connects to your YuJa site.<br/><br/>Please see the following [support articles](http://support.yuja.com/) for complete information on this plugin.<br/><br/> It also may be necessary to purge your Moodle caches after changing these settings.<br/><br/>';
 
-$string['setting_access_url_label'] = 'Your YuJa Access URL:';
+$string['setting_access_url_label'] = 'Your YuJa access URL:';
 $string['setting_access_url_desc'] = '**Note:** This setting is your YuJa access URL provided by your YuJa Solutions Engineer.<br/><br/>';
 
-$string['setting_consumer_key_label'] = 'Your YuJa Consumer Key';
+$string['setting_consumer_key_label'] = 'Your YuJa consumer key';
 $string['setting_consumer_key_desc'] = '**Note:** This is your unique YuJa LTI consumer key provided by your YuJa Solutions Engineer.';
 
-$string['setting_shared_secret_label'] = 'Your YuJa Shared Secret';
+$string['setting_shared_secret_label'] = 'Your YuJa shared secret';
 $string['setting_shared_secret_desc'] = '**Note:** This is your unique YuJa LTI shared secret provided by your YuJa Solutions Engineer.';
 
 $string['no_course_id'] = 'Expected a valid course id';
-$string['no_lti_config'] = 'Expected some LTI configuration settings. Please update your YuJa Package';
+$string['no_lti_config'] = 'Expected some LTI configuration settings. Please update your YuJa package';
+
+
+// Privacy API fields
+$string['privacy:metadata:lti_client'] = 'In order to integrate with a remote LTI service, user and course data needs to be exchanged with that service.';
+$string['privacy:metadata:lti_client:userid'] = 'The userid is sent from Moodle to determine the correct user to provision into within the LTI Tool';
+$string['privacy:metadata:lti_client:course_id'] = 'The course id is sent from Moodle to determine the correct course to provision into within the LTI Tool';
+$string['privacy:metadata:lti_client:course_shortname'] = 'The course short name is sent from Moodle to determine the correct course to provision into within the LTI Tool, and for course creation within the LTI Tool';
+$string['privacy:metadata:lti_client:course_fullname'] = 'The course full name is sent from Moodle to determine the correct course to provision into within the LTI Tool, and for course creation within the LTI Tool';
+$string['privacy:metadata:lti_client:user_fullname'] = 'The user fullname is sent from Moodle to determine the correct user to provision into within the LTI Tool, and for user creation within the LTI Tool';
+$string['privacy:metadata:lti_client:user_idnumber'] = 'The user idnumber is sent from Moodle to determine the correct user to provision into within the LTI Tool, and for user creation within the LTI Tool';
+$string['privacy:metadata:lti_client:user_username'] = 'The user username is sent from Moodle to determine the correct user to provision into within the LTI Tool, and for user creation within the LTI Tool';
+$string['privacy:metadata:lti_client:user_family'] = 'The user family name is sent from Moodle to determine the correct user to provision into within the LTI Tool, and for user creation within the LTI Tool';
+$string['privacy:metadata:lti_client:user_given'] = 'The user given name is sent from Moodle to determine the correct user to provision into within the LTI Tool, and for user creation within the LTI Tool';
+$string['privacy:metadata:lti_client:user_email']= 'The user email is sent from Moodle to determine the correct user to provision into within the LTI Tool, and for user creation within the LTI Tool';
+$string['privacy:metadata:lti_client:roles'] = 'The Moodle roles are sent from Moodle to determine the user\'s role within the LTI Tool, and for user creation within the LTI Tool';
+$string['privacy:metadata:lti_client:moodle_version'] = 'The Moodle version number is sent from Moodle to determine the correct behaviour for the LTI Tool to take.';
+$string['privacy:metadata:lti_client:course_idnumber'] = 'The course idnumber is sent from Moodle to determine the correct course to provision into within the LTI Tool, and for course creation within the LTI Tool';
