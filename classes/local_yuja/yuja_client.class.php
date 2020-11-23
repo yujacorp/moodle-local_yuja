@@ -64,6 +64,12 @@ class yuja_client
             // Moodle 2.8 (2014111000) adds support for specifying whether this is an LTI 2.0 launch.
             $roles = lti_get_ims_role($USER, 0, $course->id, false);
         }
+
+        $customtoolconsumerinstanceguid = parse_url($CFG->wwwroot)['host'];
+        // This more unique instance guid was implemented in https://tracker.moodle.org/browse/MDL-67612
+        // for version 3.9 (2020061500)
+        $toolconsumerinstanceguid = md5(get_site_identifier());
+
         $customparams = array(
             'context_id' => $course->id,
             'context_label' => $course->shortname,
@@ -80,6 +86,8 @@ class yuja_client
             'roles' => $roles,
             'tool_consumer_info_product_family_code' => 'moodle',
             'tool_consumer_info_version' => (string)$CFG->version,
+            'custom_tool_consumer_instance_guid' => $customtoolconsumerinstanceguid,
+            'tool_consumer_instance_guid' => $toolconsumerinstanceguid,
             'user_id' => $USER->id,
             'custom_context_id' => $course->idnumber,
             'custom_plugin_info' => $this->get_plugin_info(),
