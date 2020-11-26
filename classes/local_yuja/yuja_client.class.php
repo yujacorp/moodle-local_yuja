@@ -29,7 +29,7 @@ require_once($CFG->dirroot. '/mod/lti/locallib.php');
 
 /**
  * The YuJa Moodle Client
- * 
+ *
  * Encapsulates extracting LTI information and creating signed urls to access YuJa resources
  */
 class yuja_client
@@ -52,7 +52,7 @@ class yuja_client
 
         $usergiven = (isset($USER->firstname)) ? $USER->firstname : '';
         $userfamily = (isset($USER->lastname)) ? $USER->lastname : '';
-        //$userfull = trim($usergiven . ' ' . $userfamily);
+        // $userfull = trim($usergiven . ' ' . $userfamily);
         $userfull = (isset($USER->fullname)) ? $USER->fullname : '';
         $useremail = (isset($USER->email)) ? $USER->email : '';
         $useridnumber = (isset($USER->idnumber)) ? $USER->idnumber : '';
