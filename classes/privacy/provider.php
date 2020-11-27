@@ -14,16 +14,31 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Yuja Local Plugin
+ * @package    local_yuja
+ * @subpackage yuja
+ * @copyright  2016 YuJa
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace local_yuja\privacy;
 use \core_privacy\local\metadata\collection;
 
-// This plugin does store personal user data.
+/**
+ * The provider class for implementing the Privacy API for YuJa Moodle Client
+ * This documents which moodle data this plugin can access, and what it will be used for.
+ *
+ * This plugin does store personal user data.
+ */
 class provider implements \core_privacy\local\metadata\provider {
 
+    /**
+     * Returns meta data about this system.
+     * @param collection $collection the collection to add the information to
+     * @return collection
+     */
     public static function get_metadata(collection $collection) : collection {
-
-        // Here you will add more items into the collection.
-
         $collection->add_external_location_link('lti_client', [
             'user_id' => 'privacy:metadata:lti_client:user_id',
             'user_fullname' => 'privacy:metadata:lti_client:user_fullname',
