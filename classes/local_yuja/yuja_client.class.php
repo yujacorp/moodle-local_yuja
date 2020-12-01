@@ -70,6 +70,13 @@ class yuja_client
         // for version 3.9 (2020061500)
         $toolconsumerinstanceguid = md5(get_site_identifier());
 
+        $returnurlparams = array('course' => $course->id,
+            //'launch_container' => $launchcontainer,
+            'instanceid' => $instance->id,
+            'sesskey' => sesskey());
+        $url = new \moodle_url('/mod/lti/return.php', $returnurlparams);
+        $returnurl = $url->out(false);
+
         $customparams = array(
             'context_id' => $course->id,
             'context_label' => $course->shortname,
@@ -88,6 +95,7 @@ class yuja_client
             'tool_consumer_info_version' => (string)$CFG->version,
             'custom_tool_consumer_instance_guid' => $customtoolconsumerinstanceguid,
             'tool_consumer_instance_guid' => $toolconsumerinstanceguid,
+            'launch_presentation_return_url' => $returnurl,
             'user_id' => $USER->id,
             'custom_context_id' => $course->idnumber,
             'custom_plugin_info' => $this->get_plugin_info(),
