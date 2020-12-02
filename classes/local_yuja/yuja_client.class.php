@@ -71,7 +71,7 @@ class yuja_client
         $toolconsumerinstanceguid = md5(get_site_identifier());
 
         $returnurlparams = array('course' => $course->id,
-            //'launch_container' => $launchcontainer,
+            // 'launch_container' => $launchcontainer,
             'instanceid' => $instance->id,
             'sesskey' => sesskey());
         $url = new \moodle_url('/mod/lti/return.php', $returnurlparams);
