@@ -53,6 +53,8 @@ class provider implements \core_privacy\local\metadata\provider {
             'roles' => 'privacy:metadata:lti_client:roles',
             'moodle_version' => 'privacy:metadata:lti_client:moodle_version',
             'course_idnumber' => 'privacy:metadata:lti_client:course_idnumber',
+            'course_startdate' => 'privacy:metadata:lti_client:course_startdate',
+            'instance_guid' => 'privacy:metadata:lti_client:instance_guid'
         ], 'privacy:metadata:lti_client');
 
         return $collection;

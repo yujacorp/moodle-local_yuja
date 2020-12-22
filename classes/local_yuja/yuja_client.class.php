@@ -98,7 +98,8 @@ class yuja_client
             'launch_presentation_return_url' => $returnurl,
             'user_id' => $USER->id,
             'custom_context_id' => $course->idnumber,
-            'custom_plugin_info' => $this->get_plugin_info(),
+            'custom_context_term' => $course->startdate,
+            'custom_plugin_info' => $this->get_plugin_info()
         );
 
         $params = array_merge($basicparams, $customparams);
