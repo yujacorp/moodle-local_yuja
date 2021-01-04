@@ -55,3 +55,5 @@ $string['privacy:metadata:lti_client:user_email'] = 'The user email is sent from
 $string['privacy:metadata:lti_client:roles'] = 'The Moodle roles are sent from Moodle to determine the user\'s role within the LTI Tool, and for user creation within the LTI Tool';
 $string['privacy:metadata:lti_client:moodle_version'] = 'The Moodle version number is sent from Moodle to determine the correct behaviour for the LTI Tool to take.';
 $string['privacy:metadata:lti_client:course_idnumber'] = 'The course idnumber is sent from Moodle to determine the correct course to provision into within the LTI Tool, and for course creation within the LTI Tool';
+$string['privacy:metadata:lti_client:course_startdate'] = 'The course startdate is sent from Moodle to determine the course term for when a new course is provisioned within the LTI Tool';
+$string['privacy:metadata:lti_client:instance_guid'] = 'The instance guid is sent from Moodle to determine the correct users and courses to link to in the case that an organization has multiple moodle instances';
