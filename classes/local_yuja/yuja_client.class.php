@@ -84,6 +84,7 @@ class yuja_client
             'ext_lms' => 'moodle-2',
             'lis_person_sourcedid' => $useridnumber,
             'custom_lis_person_sourcedid' => $userusername,
+            'ext_user_username' => $userusername,
             'lis_person_name_family' => $userfamily,
             'lis_person_name_full' => $userfull,
             'lis_person_name_given' => $usergiven,
