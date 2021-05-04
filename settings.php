@@ -43,13 +43,13 @@ if ($hassiteconfig) {
     $settings->add($setting);
 
     // Settings
-    $setting_names = ['access_url', 'consumer_key', 'shared_secret'];
-    for ($i = 0; $i < count($setting_names); $i++) {
-        $setting_name = $setting_names[$i];
+    $settingnames = ['access_url', 'consumer_key', 'shared_secret'];
+    for ($i = 0; $i < count($settingnames); $i++) {
+        $settingname = $settingnames[$i];
         $setting = new admin_setting_configtext(
-            'local_yuja' . '/' . $setting_name,
-            get_string('setting_' . $setting_name . '_label', 'local_yuja'),
-            get_string('setting_' . $setting_name . '_desc', 'local_yuja'),
+            'local_yuja' . '/' . $settingname,
+            get_string('setting_' . $settingname . '_label', 'local_yuja'),
+            get_string('setting_' . $settingname . '_desc', 'local_yuja'),
             '',
             PARAM_TEXT
         );
