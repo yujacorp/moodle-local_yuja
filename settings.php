@@ -42,37 +42,20 @@ if ($hassiteconfig) {
     $setting->plugin = 'local_yuja';
     $settings->add($setting);
 
-    // Access url.
-    $setting = new admin_setting_configtext(
-            'local_yuja' . '/access_url',
-            get_string('setting_access_url_label', 'local_yuja'),
-            get_string('setting_access_url_desc', 'local_yuja'),
+    // Settings
+    $settingnames = ['access_url', 'consumer_key', 'shared_secret'];
+    for ($i = 0; $i < count($settingnames); $i++) {
+        $settingname = $settingnames[$i];
+        $setting = new admin_setting_configtext(
+            'local_yuja' . '/' . $settingname,
+            get_string('setting_' . $settingname . '_label', 'local_yuja'),
+            get_string('setting_' . $settingname . '_desc', 'local_yuja'),
             '',
             PARAM_TEXT
         );
-    $setting->plugin = 'local_yuja';
-    $settings->add($setting);
-
-    // Consumer_key.
-    $setting = new admin_setting_configtext(
-            'local_yuja' . '/consumer_key',
-            get_string('setting_consumer_key_label', 'local_yuja'),
-            get_string('setting_consumer_key_desc', 'local_yuja'),
-            '',
-            PARAM_TEXT
-        );
-    $setting->plugin = 'local_yuja';
-    $settings->add($setting);
-
-    // Shared_secret.
-    $setting = new admin_setting_configtext(
-            'local_yuja' . '/shared_secret',
-            get_string('setting_shared_secret_label', 'local_yuja'),
-            get_string('setting_shared_secret_desc', 'local_yuja'),
-            '', PARAM_TEXT
-        );
-    $setting->plugin = 'local_yuja';
-    $settings->add($setting);
+        $setting->plugin = 'local_yuja';
+        $settings->add($setting);
+    }
 
     $ADMIN->add('localplugins', $settings);
 }
