@@ -52,7 +52,6 @@ class yuja_client
 
         $usergiven = (isset($USER->firstname)) ? $USER->firstname : '';
         $userfamily = (isset($USER->lastname)) ? $USER->lastname : '';
-        // $userfull = trim($usergiven . ' ' . $userfamily);
         $userfull = (isset($USER->fullname)) ? $USER->fullname : '';
         $useremail = (isset($USER->email)) ? $USER->email : '';
         $useridnumber = (isset($USER->idnumber)) ? $USER->idnumber : '';
@@ -65,13 +64,11 @@ class yuja_client
             $roles = lti_get_ims_role($USER, 0, $course->id, false);
         }
 
-        $customtoolconsumerinstanceguid = parse_url($CFG->wwwroot)['host'];
         // This more unique instance guid was implemented in https://tracker.moodle.org/browse/MDL-67612
         // for version 3.9 (2020061500)
         $toolconsumerinstanceguid = md5(get_site_identifier());
 
         $returnurlparams = array('course' => $course->id,
-            // 'launch_container' => $launchcontainer,
             'instanceid' => $instance->id,
             'sesskey' => sesskey());
         $url = new \moodle_url('/mod/lti/return.php', $returnurlparams);
@@ -94,7 +91,7 @@ class yuja_client
             'roles' => $roles,
             'tool_consumer_info_product_family_code' => 'moodle',
             'tool_consumer_info_version' => (string)$CFG->version,
-            'custom_tool_consumer_instance_guid' => $customtoolconsumerinstanceguid,
+            'custom_tool_consumer_instance_guid' => $orgid,
             'tool_consumer_instance_guid' => $toolconsumerinstanceguid,
             'launch_presentation_return_url' => $returnurl,
             'user_id' => $USER->id,
@@ -199,6 +196,7 @@ class yuja_client
      * @return string
      */
     public function get_webroot() {
+        global $CFG;
         return rtrim($CFG->wwwroot, '/');
     }
 

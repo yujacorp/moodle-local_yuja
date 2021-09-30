@@ -42,7 +42,7 @@ $string['no_lti_config'] = 'Expected some LTI configuration settings. Please upd
 
 // Privacy API fields
 $string['privacy:metadata:lti_client'] = 'In order to integrate with a remote LTI service, user and course data needs to be exchanged with that service.';
-$string['privacy:metadata:lti_client:userid'] = 'The userid is sent from Moodle to determine the correct user to provision into within the LTI Tool';
+$string['privacy:metadata:lti_client:user_id'] = 'The userid is sent from Moodle to determine the correct user to provision into within the LTI Tool';
 $string['privacy:metadata:lti_client:course_id'] = 'The course id is sent from Moodle to determine the correct course to provision into within the LTI Tool';
 $string['privacy:metadata:lti_client:course_shortname'] = 'The course short name is sent from Moodle to determine the correct course to provision into within the LTI Tool, and for course creation within the LTI Tool';
 $string['privacy:metadata:lti_client:course_fullname'] = 'The course full name is sent from Moodle to determine the correct course to provision into within the LTI Tool, and for course creation within the LTI Tool';
