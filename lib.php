@@ -23,7 +23,3 @@
  */
 
 defined('MOODLE_INTERNAL') || die('Must access from moodle');
-
-// Add the library to the include path.
-// $path = dirname(__FILE__) . '/library';
-// set_include_path(get_include_path() . PATH_SEPARATOR . $path);

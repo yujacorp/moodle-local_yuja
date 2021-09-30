@@ -30,14 +30,14 @@ require_once($CFG->dirroot. '/local/yuja/lib.php');
 if ($hassiteconfig) {
     $settings = new admin_settingpage(
             'local_yuja',
-            get_string('pluginname', 'local_yuja')
+            new lang_string('pluginname', 'local_yuja')
         );
 
     // Heading.
     $setting = new admin_setting_heading(
             'local_yuja' . '/heading',
             '',
-            get_string('setting_heading_desc', 'local_yuja')
+            new lang_string('setting_heading_desc', 'local_yuja')
         );
     $setting->plugin = 'local_yuja';
     $settings->add($setting);
@@ -48,8 +48,8 @@ if ($hassiteconfig) {
         $settingname = $settingnames[$i];
         $setting = new admin_setting_configtext(
             'local_yuja' . '/' . $settingname,
-            get_string('setting_' . $settingname . '_label', 'local_yuja'),
-            get_string('setting_' . $settingname . '_desc', 'local_yuja'),
+            new lang_string('setting_' . $settingname . '_label', 'local_yuja'),
+            new lang_string('setting_' . $settingname . '_desc', 'local_yuja'),
             '',
             PARAM_TEXT
         );
