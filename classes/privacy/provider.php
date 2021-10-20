@@ -23,7 +23,9 @@
  */
 
 namespace local_yuja\privacy;
+
 use \core_privacy\local\metadata\collection;
+use \local_yuja\privacy\provider;
 
 /**
  * The provider class for implementing the Privacy API for YuJa Moodle Client
@@ -31,7 +33,8 @@ use \core_privacy\local\metadata\collection;
  * This documents which moodle data this plugin can access, and what it will be used for.
  * This plugin does store personal user data.
  */
-class provider implements \core_privacy\local\metadata\provider {
+class provider implements \core_privacy\local\metadata\provider,
+        \core_privacy\local\request\data_provider {
 
     /**
      * Returns meta data about this system.
