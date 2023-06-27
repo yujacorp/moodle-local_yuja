@@ -97,7 +97,8 @@ class yuja_client
             'user_id' => $USER->id,
             'custom_context_id' => $course->idnumber,
             'custom_context_term' => $course->startdate,
-            'custom_plugin_info' => $this->get_plugin_info()
+            'custom_plugin_info' => $this->get_plugin_info(), 
+            'not_gradeable' => 'true'
         );
 
         $params = array_merge($basicparams, $customparams);
