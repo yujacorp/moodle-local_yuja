@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die('Must access from moodle');
 
 $plugin                     = new stdClass();
-$plugin->version            = 2021051700;
+$plugin->version            = 2023062600;
 $plugin->requires           = 2012120300;
 $plugin->component          = 'local_yuja';
 $plugin->release            = '1.0.0';
