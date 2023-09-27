@@ -150,11 +150,11 @@ class yuja_client
      * @param string|int $courseid
      * @return string
      */
-    public function get_signed_videos_url($courseid) {
+    public function get_signed_videos_url($courseid, $uniquelaunchid) {
         $url = $this->get_yuja_videos_url();
         return $url . '?' . $this->get_query(
             $this->get_signed_lti_params(
-                $url, 'GET', $courseid, array('ext_content_return_types' => 'lti_api;moodle-media-chooser'))
+                $url, 'GET', $courseid, array('ext_content_return_types' => 'lti_api;moodle-media-chooser', 'unique_launch_id' => $uniquelaunchid))
         );
     }
 
@@ -163,11 +163,11 @@ class yuja_client
      * @param string|int $courseid
      * @return string
      */
-    public function get_signed_js_url($courseid) {
+    public function get_signed_js_url($courseid, $uniquelaunchid) {
         $url = $this->get_yuja_videos_url();
         return $url . '?' . $this->get_query(
             $this->get_signed_lti_params(
-                $url, 'GET', $courseid, array('ext_content_return_types' => 'lti_api;moodle-media-chooser-js'))
+                $url, 'GET', $courseid, array('ext_content_return_types' => 'lti_api;moodle-media-chooser-js', 'unique_launch_id' => $uniquelaunchid))
         );
     }
 
@@ -176,14 +176,15 @@ class yuja_client
      * @return array
      */
     public function get_texteditor_params() {
-        global $COURSE;
+        global $COURSE, $USER;
 
         $params = array();
 
         if ($this->has_lti_config() && isset($COURSE->id)) {
             try {
-                $params['yujaVideosUrl'] = $this->get_signed_videos_url($COURSE->id);
-                $params['yujaJsUrl'] = $this->get_signed_js_url($COURSE->id);
+                $uniquelaunchid = uniqid($USER->id.'_'.$COURSE->id.'_', true);
+                $params['yujaVideosUrl'] = $this->get_signed_videos_url($COURSE->id, $uniquelaunchid);
+                $params['yujaJsUrl'] = $this->get_signed_js_url($COURSE->id, $uniquelaunchid);
             } catch (Exception $e) {
                 $param['yujaError'] = $e->getMessage();
             }
