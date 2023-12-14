@@ -36,8 +36,14 @@ $string['setting_consumer_key_desc'] = '**Note:** This is your unique YuJa LTI c
 $string['setting_shared_secret_label'] = 'Your YuJa shared secret';
 $string['setting_shared_secret_desc'] = '**Note:** This is your unique YuJa LTI shared secret provided by your YuJa Solutions Engineer.';
 
+$string['setting_lti_version_label'] = 'LTI Version';
+$string['setting_lti_version_desc'] = '**Note:** Select which LTI version to enable.<br><br>';
+
+$string['setting_tool_url_label'] = 'Tool URL';
+$string['setting_tool_url_desc'] = '**Note:** The URL must match the Tool URL of the LTI 1.3 External tool.';
+
 $string['no_course_id'] = 'Expected a valid course id';
-$string['no_lti_config'] = 'Expected some LTI configuration settings. Please update your YuJa package';
+$string['no_lti_config'] = 'LTI configuration settings are incomplete. Please update your YuJa package';
 
 
 // Privacy API fields

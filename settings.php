@@ -42,6 +42,17 @@ if ($hassiteconfig) {
     $setting->plugin = 'local_yuja';
     $settings->add($setting);
 
+    // Select lti version
+    $setting = new admin_setting_configselect(
+           'local_yuja/lti_version',
+           new lang_string('setting_lti_version_label', 'local_yuja'),
+           new lang_string('setting_lti_version_desc', 'local_yuja'),
+           1,
+           array("1.1" => "LTI 1.1", "1.3" => "LTI 1.3")
+       );
+    $setting->plugin = 'local_yuja';
+    $settings->add($setting);
+
     // Settings
     $settingnames = ['access_url', 'consumer_key', 'shared_secret'];
     for ($i = 0; $i < count($settingnames); $i++) {
@@ -54,8 +65,21 @@ if ($hassiteconfig) {
             PARAM_TEXT
         );
         $setting->plugin = 'local_yuja';
+        $settings->hide_if('local_yuja' . '/' . $settingname, 'local_yuja/lti_version', 'eq', "1.3");
         $settings->add($setting);
     }
+    
+    $setting = new admin_setting_configtext(
+        'local_yuja/tool_url',
+        new lang_string('setting_tool_url_label', 'local_yuja'),
+        new lang_string('setting_tool_url_desc', 'local_yuja'),
+        '',
+        PARAM_TEXT
+    );
+    $setting->plugin = 'local_yuja';
+    $settings->hide_if('local_yuja/tool_url', 'local_yuja/lti_version', 'eq', "1.1");
+    $settings->add($setting);
+
 
     $ADMIN->add('localplugins', $settings);
 }
