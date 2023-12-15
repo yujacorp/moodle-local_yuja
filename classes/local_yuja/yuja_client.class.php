@@ -175,19 +175,24 @@ class yuja_client
      * Get the custom atto/tinymce params
      * @return array
      */
-    public function get_texteditor_params() {
+    public function get_texteditor_params($plugintype) {
         global $COURSE, $USER;
 
         $params = array();
 
-        if ($this->has_lti_config() && isset($COURSE->id)) {
-            try {
-                $uniquelaunchid = uniqid($USER->id.'_'.$COURSE->id.'_', true);
+        try {
+            $uniquelaunchid = uniqid($USER->id.'_'.$COURSE->id.'_', true);
+            $params['ltiVersion'] = get_config('local_yuja', 'lti_version');
+            if ($this->get_lti_version() == '1.1' && $this->has_lti_config() && isset($COURSE->id)) {
                 $params['yujaVideosUrl'] = $this->get_signed_videos_url($COURSE->id, $uniquelaunchid);
                 $params['yujaJsUrl'] = $this->get_signed_js_url($COURSE->id, $uniquelaunchid);
-            } catch (Exception $e) {
-                $param['yujaError'] = $e->getMessage();
+            } else if ($this->has_lti3_config() && isset($COURSE->id)) {
+                $tool = $this->get_matching_lti_tool(get_config('local_yuja', 'tool_url'));
+                $login_initiation_params = $this->lti_1p3_build_login_request($plugintype, $COURSE->id, $tool, $USER->id, $uniquelaunchid);
+                $params['lti3LoginInitUrl'] = $tool->lti_initiatelogin . '?' . $this->get_query($login_initiation_params);
             }
+        } catch (Exception $e) {
+            $param['yujaError'] = $e->getMessage();
         }
 
         return $params;
@@ -211,6 +216,14 @@ class yuja_client
     }
 
     /**
+     * Get the lti 1.3 tool url
+     * @return string
+     */
+    private function get_yuja_lti3_tool_url() {
+        return get_config('local_yuja', 'tool_url');
+    }
+
+    /**
      * Whether the config is setup for lti
      * @return boolean
      */
@@ -218,6 +231,22 @@ class yuja_client
         return (!empty(get_config('local_yuja', 'access_url')) &&
         !empty(get_config('local_yuja', 'consumer_key')) &&
         !empty(get_config('local_yuja', 'shared_secret')));
+    }
+    
+    /**
+     * Whether the config is setup for lti 1.3
+     * @return boolean
+     */
+    public function has_lti3_config() {
+        return !empty(get_config('local_yuja', 'tool_url'));
+    }
+    
+    /**
+     * LTI version
+     * @return boolean
+     */
+    public function get_lti_version() {
+        return get_config('local_yuja', 'lti_version');
     }
 
     /**
@@ -227,4 +256,71 @@ class yuja_client
     public function get_plugin_info() {
         return 'yuja-moodle-' . get_config('local_yuja', 'version');
     }
+
+    /**
+     * Get the matching lti tool
+     */
+    public static function get_matching_lti_tool($endpoint) {
+        global $DB;
+
+        $ltitools = $DB->get_records('lti_types');
+
+        foreach ($ltitools as $tool) {
+            if ($tool->baseurl === $endpoint) {
+                return lti_get_type_type_config($tool->id);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Prepares an LTI 1.3 login request
+     *
+     * @param int            $courseid  Course ID
+     * @param stdClass       $config    Tool type configuration
+     * @param string         $messagetype   LTI message type
+     * @param int            $foruserid Id of the user targeted by the launch
+     * @param string         $title     Title of content item
+     * @param string         $text      Description of content item
+     * @return array Login request parameters
+     */
+    function lti_1p3_build_login_request($plugintype, $courseid, $config, $foruserid, $uniquelaunchid, $title='', $text='') {
+        global $USER, $CFG, $SESSION;
+        $ltihint = [];
+        $endpoint = get_config('local_yuja', 'tool_url');
+        if (!empty($config->lti_toolurl_ContentItemSelectionRequest)) {
+            $endpoint = $config->lti_toolurl_ContentItemSelectionRequest;
+        }
+        $messagetype = 'ContentItemSelectionRequest';
+        $launchid = "ltilaunch_$messagetype".rand();
+        $SESSION->$launchid =
+            "{$courseid},{$config->typeid},{$messagetype},{$foruserid}," . base64_encode($title) . ',' . base64_encode($text);
+
+        $endpoint = trim($endpoint);
+        $services = lti_get_services();
+        foreach ($services as $service) {
+            [$endpoint] = $service->override_endpoint($messagetype, $endpoint, '', $courseid);
+        }
+
+        $ltihint['launchid'] = $launchid;
+        $ltihint['uniquelaunchid'] = $uniquelaunchid;
+        // If SSL is forced make sure https is on the normal launch URL.
+        if (isset($config->lti_forcessl) && ($config->lti_forcessl == '1')) {
+            $endpoint = lti_ensure_url_is_https($endpoint);
+        } else if (!strstr($endpoint, '://')) {
+            $endpoint = 'http://' . $endpoint;
+        }
+
+        $params = array();
+        $params['iss'] = $CFG->wwwroot;
+        $params['target_link_uri'] = $endpoint;
+        $params['login_hint'] = $USER->id;
+        $params['lti_message_hint'] = json_encode($ltihint);
+        $params['client_id'] = $config->lti_clientid;
+        $params['lti_deployment_id'] = $config->typeid;
+        $params['plugin_type'] = $plugintype;
+        return $params;
+    }
+
 }

@@ -25,10 +25,10 @@
 defined('MOODLE_INTERNAL') || die('Must access from moodle');
 
 $plugin                     = new stdClass();
-$plugin->version            = 2023092600;
+$plugin->version            = 2023121400;
 $plugin->requires           = 2012120300;
 $plugin->component          = 'local_yuja';
-$plugin->release            = '1.0.0';
+$plugin->release            = '2.0.0';
 $plugin->maturity           = MATURITY_STABLE;
 $plugin->dependencies       = array(
     'mod_lti' => 2011112900,
