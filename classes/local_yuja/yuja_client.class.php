@@ -298,11 +298,7 @@ class yuja_client
             "{$courseid},{$config->typeid},{$messagetype},{$foruserid}," . base64_encode($title) . ',' . base64_encode($text);
 
         $endpoint = trim($endpoint);
-        $services = lti_get_services();
-        foreach ($services as $service) {
-            [$endpoint] = $service->override_endpoint($messagetype, $endpoint, '', $courseid);
-        }
-
+        
         $ltihint['launchid'] = $launchid;
         $ltihint['uniquelaunchid'] = $uniquelaunchid;
         // If SSL is forced make sure https is on the normal launch URL.
