@@ -22,7 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use mod_lti\local\ltiopenid\jwks_helper;
 use Firebase\JWT\JWT;
 
 class auth_helper {
@@ -290,8 +289,9 @@ class auth_helper {
             }
         }
 
-        $privatekey = jwks_helper::get_private_key();
-        $jwt = JWT::encode($payload, $privatekey['key'], 'RS256', $privatekey['kid']);
+        $privatekey = get_config('mod_lti', 'privatekey');
+        $kid = get_config('mod_lti', 'kid');
+        $jwt = JWT::encode($payload, $privatekey, 'RS256', $kid);
 
         $newparms = array();
         $newparms['id_token'] = $jwt;
