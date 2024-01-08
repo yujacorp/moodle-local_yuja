@@ -259,6 +259,8 @@ class auth_helper {
         $payload[LTI_JWT_CLAIM_PREFIX . '/claim/deployment_id'] = strval($typeid);
         $payload[LTI_JWT_CLAIM_PREFIX . '/claim/target_link_uri'] = $endpoint;
 
+        $payload['isMoodlePluginLaunch'] = true;
+        
         foreach ($parms as $key => $value) {
             $claim = LTI_JWT_CLAIM_PREFIX;
             if (array_key_exists($key, $claimmapping)) {
