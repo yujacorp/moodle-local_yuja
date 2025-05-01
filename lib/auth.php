@@ -121,10 +121,7 @@ if ($ok) {
     
     require_login($course);
     $context = context_course::instance($courseid);
-    require_capability('moodle/course:manageactivities', $context);
-    require_capability('mod/lti:addcoursetool', $context);
     // Set the return URL. We send the launch container along to help us avoid frames-within-frames when the user returns.
-
     $returnurl = new \moodle_url('', []);
     // Prepare the request.
     $title = base64_decode($titleb64);
