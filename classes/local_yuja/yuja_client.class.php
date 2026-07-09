@@ -303,6 +303,8 @@ class yuja_client
         $ltihint['uniquelaunchid'] = $uniquelaunchid;
         $ltihint['courseid'] = $courseid;
         $ltihint['typeid'] = $config->typeid;
+        $ltihint['messagetype'] = $messagetype;
+        $ltihint['foruserid'] = $foruserid;
         $ltihint['titleb64'] = base64_encode($title);
         $ltihint['textb64'] = base64_encode($text);
         // If SSL is forced make sure https is on the normal launch URL.
