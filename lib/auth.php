@@ -76,7 +76,22 @@ if ($ok && ($responsetype !== 'id_token')) {
 }
 if ($ok) {
     $launchid = $ltimessagehint->launchid;
-    list($courseid, $typeid, $messagetype, $foruserid, $titleb64, $textb64) = explode(',', $SESSION->$launchid, 7);
+    if (isset($SESSION->$launchid)) {
+        list($courseid, $typeid, $messagetype, $foruserid, $titleb64, $textb64) = explode(',', $SESSION->$launchid, 7);
+    } else if (isset($ltimessagehint->courseid) && isset($ltimessagehint->typeid)) {
+        $courseid = $ltimessagehint->courseid;
+        $typeid = $ltimessagehint->typeid;
+        $messagetype = $ltimessagehint->messagetype;
+        $foruserid = $ltimessagehint->foruserid;
+        $titleb64 = $ltimessagehint->titleb64;
+        $textb64 = $ltimessagehint->textb64; 
+    } else {
+        $ok = false;
+        $error = 'invalid_request';
+        $desc = 'No launch context available';
+    }
+}
+if ($ok) {
     $config = lti_get_type_type_config($typeid);
     $ok = ($clientid === $config->lti_clientid);
     if (!$ok) {
