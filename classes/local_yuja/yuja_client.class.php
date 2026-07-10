@@ -301,6 +301,12 @@ class yuja_client
         
         $ltihint['launchid'] = $launchid;
         $ltihint['uniquelaunchid'] = $uniquelaunchid;
+        $ltihint['courseid'] = $courseid;
+        $ltihint['typeid'] = $config->typeid;
+        $ltihint['messagetype'] = $messagetype;
+        $ltihint['foruserid'] = $foruserid;
+        $ltihint['titleb64'] = base64_encode($title);
+        $ltihint['textb64'] = base64_encode($text);
         // If SSL is forced make sure https is on the normal launch URL.
         if (isset($config->lti_forcessl) && ($config->lti_forcessl == '1')) {
             $endpoint = lti_ensure_url_is_https($endpoint);
